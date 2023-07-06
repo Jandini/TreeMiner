@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TreeMiner", "TreeMiner\TreeMiner.csproj", "{174A16F4-DAF3-4988-A848-430EEF92162F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeMiner.Tests", "TreeMiner.Tests\TreeMiner.Tests.csproj", "{88C6F798-55C7-4CD3-A706-D3EF771112A4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{174A16F4-DAF3-4988-A848-430EEF92162F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{174A16F4-DAF3-4988-A848-430EEF92162F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{174A16F4-DAF3-4988-A848-430EEF92162F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{174A16F4-DAF3-4988-A848-430EEF92162F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88C6F798-55C7-4CD3-A706-D3EF771112A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88C6F798-55C7-4CD3-A706-D3EF771112A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88C6F798-55C7-4CD3-A706-D3EF771112A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88C6F798-55C7-4CD3-A706-D3EF771112A4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F55496D2-A9ED-46D6-A9B1-30E09D7A079E}
+	EndGlobalSection
+EndGlobal
