@@ -17,7 +17,9 @@ namespace TreeMiner.Tests
                 Parent = Guid.Empty
             };
 
-            foreach (var artifact in TreeMiner<T>.Dig(dirArtifact: rootArtifact, onDirArtifact: null, onFileArtifact: null, onException: null, exceptionAggregate: exceptionAggregate))
+            var fileSystemMiner = new FileSystemMiner<T>();
+
+            foreach (var artifact in fileSystemMiner.DigFileSystem(dirArtifact: rootArtifact, onFileArtifact: null, onException: null, exceptionAggregate: exceptionAggregate))
                 yield return artifact;
 
             if (exceptionAggregate.Any())
@@ -39,11 +41,11 @@ namespace TreeMiner.Tests
 
 
 
-        public static IEnumerable<TreeHashArtifact> Hash(string root) 
+        public static IEnumerable<TreeArtifactHash> Hash(string root) 
         {
             var exceptionAggregate = new List<Exception>();
 
-            var rootArtifact = new TreeHashArtifact
+            var rootArtifact = new TreeArtifactHash
             {
                 Info = new DirectoryInfo(root),
                 Id = Guid.Empty,
@@ -51,8 +53,10 @@ namespace TreeMiner.Tests
                 Hash = Convert.ToHexString(MD5.HashData(Array.Empty<byte>()))
             };
 
+            var fileSystemMiner = new FileSystemMiner<TreeArtifactHash>();
 
-            foreach (var artifact in TreeMiner<TreeHashArtifact>.Dig(dirArtifact: rootArtifact, 
+            foreach (var artifact in fileSystemMiner.DigFileSystem(
+                dirArtifact: rootArtifact,                 
                 onDirArtifact: (dir, content) =>
                 {
                     var list = string.Join(';', content.OrderBy(a => a.Name).Select(s => string.Join(',', s.Name, (s as FileInfo)?.Length ?? 0)));
@@ -60,9 +64,12 @@ namespace TreeMiner.Tests
 
                     return true;
                 },
-                onFileArtifact: (artifact)=>true, 
+                artifactType: ArtifactType.Directories,
+                onFileArtifact: null, 
+
                 onException: null, 
                 exceptionAggregate: exceptionAggregate))
+
 
                 yield return artifact;
 
@@ -75,7 +82,7 @@ namespace TreeMiner.Tests
         public void HashDirsTest()
         {
 
-            var artifacts = Hash(Environment.SystemDirectory);
+            var artifacts = Hash(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
 
             foreach (var artifact in artifacts)
             {
