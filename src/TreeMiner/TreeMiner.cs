@@ -1,7 +1,7 @@
 ﻿namespace TreeMiner
 {
-    public static class TreeMiner<T> where T : ITreeArtifact, new()
-    {        
+    public class TreeMiner<TTreeArtifact, TBaseArtifact, TFileArtifact, TDirArtifact> where TTreeArtifact : ITreeArtifact, new() where TFileArtifact : class, TBaseArtifact where TDirArtifact : class, TBaseArtifact
+    {       
 
         /// <summary>
         /// Recursively dig through the directory tree and yield tree artifacts with parent-child relationships represented by GUIDs.
@@ -12,50 +12,57 @@
         /// <param name="onException">Exception handler. If not provided or false is returned then exception is throw and mining is interrupted.</param>
         /// <param name="exceptionAggregate"></param>
         /// <returns>Directory and file artifacts.</returns>
-        public static IEnumerable<T> Dig(
-            T dirArtifact, 
+        public IEnumerable<TTreeArtifact> DigArtifacts(TTreeArtifact dirArtifact,
+            Func<TDirArtifact, IEnumerable<TBaseArtifact>> getArtifacts,
             ArtifactType artifactType = ArtifactType.All, 
-            DepthMode depthMode = DepthMode.Deep,
-            Func<T, IEnumerable<FileSystemInfo>, bool>? onDirArtifact = null, 
-            Func<T, bool>? onFileArtifact = null, 
+            DepthOption depthOption = DepthOption.Deep,            
+            Func<TTreeArtifact, IEnumerable<TBaseArtifact>, bool>? onDirArtifact = null, 
+            Func<TTreeArtifact, bool>? onFileArtifact = null, 
             Func<Exception, bool>? onException = null, 
             List<Exception>? exceptionAggregate = null) 
         {
-            IEnumerable<FileSystemInfo>? dirContent = null;
+            IEnumerable<TBaseArtifact>? dirContent = null;
 
             try
             {
                 // Get directory content, both files and directories
-                if (dirArtifact.Info is DirectoryInfo dirInfo)
-                    dirContent = dirInfo.GetFileSystemInfos();
+                if (dirArtifact.Info is TDirArtifact dirInfo)
+                    dirContent = getArtifacts.Invoke(dirInfo);
             }
             catch (Exception ex)
             {
                 exceptionAggregate?.Add(ex);
+
                 if (!(onException?.Invoke(ex) ?? exceptionAggregate != null))
-                    throw;                
+                    throw;
             }
 
             // Check if the content was retrivied successfully. The dirContent can be null if exception handler call back is provided.
             if (dirContent != null)
             {
-                if ((onDirArtifact?.Invoke(dirArtifact, dirContent) ?? true) && dirArtifact.Id != Guid.Empty)
-                    // Return this folder only if that is not root folder 
-                    yield return dirArtifact;
+                if ((artifactType & ArtifactType.Directories) == ArtifactType.Directories)
+                {
+                    if ((onDirArtifact?.Invoke(dirArtifact, dirContent) ?? true) && dirArtifact.Id != Guid.Empty)
+                        // Return this folder only if that is not root folder 
+                        yield return dirArtifact;
+                }
 
                 // Mine directories recursively
-                if (depthMode == DepthMode.Deep)
-                    foreach (DirectoryInfo dirInfo in dirContent.OfType<DirectoryInfo>())
-                         foreach (var subDirInfo in Dig(new T() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, artifactType, depthMode, onDirArtifact, onFileArtifact, onException, exceptionAggregate))
-                               yield return subDirInfo;
+                if (depthOption == DepthOption.Deep)
+                {
+                    foreach (TDirArtifact dirInfo in dirContent.OfType<TDirArtifact>())
+                        foreach (var subDirInfo in DigArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, getArtifacts, artifactType, depthOption, onDirArtifact, onFileArtifact, onException, exceptionAggregate))
+                            yield return subDirInfo;
+                }
 
-                if (onFileArtifact != null)
+                // Check if tree miner should return file artifacts
+                if ((artifactType & ArtifactType.Files) == ArtifactType.Files)
                 {
                     // Create and return file artifacts found in directory content
-                    foreach (FileInfo fileInfo in dirContent.OfType<FileInfo>())
+                    foreach (TFileArtifact fileInfo in dirContent.OfType<TFileArtifact>())
                     {
-                        var fileArtifact = new T() { Id = Guid.NewGuid(), Parent = dirArtifact.Id, Level = dirArtifact.Level, Info = fileInfo };
-                        if (onFileArtifact.Invoke(fileArtifact))
+                        var fileArtifact = new TTreeArtifact() { Id = Guid.NewGuid(), Parent = dirArtifact.Id, Level = dirArtifact.Level, Info = fileInfo };
+                        if (onFileArtifact?.Invoke(fileArtifact) ?? true)
                             yield return fileArtifact;
                     }
                 }
