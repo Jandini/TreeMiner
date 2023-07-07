@@ -12,7 +12,14 @@
         /// <param name="onException">Exception handler. If not provided or false is returned then exception is throw and mining is interrupted.</param>
         /// <param name="exceptionAggregate"></param>
         /// <returns>Directory and file artifacts.</returns>
-        public static IEnumerable<T> Dig(T dirArtifact, Func<T, IEnumerable<FileSystemInfo>, bool>? onDirArtifact, Func<T, bool>? onFileArtifact, Func<Exception, bool>? onException, List<Exception>? exceptionAggregate) 
+        public static IEnumerable<T> Dig(
+            T dirArtifact, 
+            ArtifactType artifactType = ArtifactType.All, 
+            DepthMode depthMode = DepthMode.Deep,
+            Func<T, IEnumerable<FileSystemInfo>, bool>? onDirArtifact = null, 
+            Func<T, bool>? onFileArtifact = null, 
+            Func<Exception, bool>? onException = null, 
+            List<Exception>? exceptionAggregate = null) 
         {
             IEnumerable<FileSystemInfo>? dirContent = null;
 
@@ -37,9 +44,10 @@
                     yield return dirArtifact;
 
                 // Mine directories recursively
-                foreach (DirectoryInfo dirInfo in dirContent.OfType<DirectoryInfo>())
-                     foreach (var subDirInfo in Dig(new T() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, onDirArtifact!, onFileArtifact, onException, exceptionAggregate))
-                           yield return subDirInfo;
+                if (depthMode == DepthMode.Deep)
+                    foreach (DirectoryInfo dirInfo in dirContent.OfType<DirectoryInfo>())
+                         foreach (var subDirInfo in Dig(new T() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, artifactType, depthMode, onDirArtifact, onFileArtifact, onException, exceptionAggregate))
+                               yield return subDirInfo;
 
                 if (onFileArtifact != null)
                 {
