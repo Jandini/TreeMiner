@@ -27,11 +27,11 @@ namespace TreeMiner.Tests
         }
 
 
-
         [Fact]
         public void DigFileSystemTest()
         {
             var artifacts = Dig<TreeArtifact>(Environment.SystemDirectory);
+
 
             foreach (var artifact in artifacts)
             {
