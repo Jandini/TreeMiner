@@ -34,13 +34,13 @@
         /// <param name="onException">Exception handler. If not provided or false is returned then exception is throw and mining is interrupted.</param>
         /// <returns>Directory and file artifacts.</returns>
         /// <exception cref="ArtifactException"></exception>
-        public IEnumerable<TTreeArtifact> CallArtifacts(TTreeArtifact dirArtifact,
+        public IEnumerable<TTreeArtifact> GetArtifacts(TTreeArtifact dirArtifact,
             Func<TDirArtifact, IEnumerable<TBaseArtifact>> getArtifacts,
-            ArtifactType artifactType = ArtifactType.All, 
-            DepthOption depthOption = DepthOption.Deep,            
-            Func<TTreeArtifact, IEnumerable<TBaseArtifact>, bool>? onDirArtifact = null, 
-            Func<TTreeArtifact, bool>? onFileArtifact = null, 
-            Func<Exception, bool>? onException = null) 
+            Func<TTreeArtifact, IEnumerable<TBaseArtifact>, bool>? onDirArtifact,
+            Func<TTreeArtifact, bool>? onFileArtifact,
+            Func<Exception, bool>? onException,
+            DepthOption depthOption = DepthOption.Deep,
+            ArtifactType artifactType = ArtifactType.All)
         {
             IEnumerable<TBaseArtifact>? dirContent = null;
 
@@ -61,7 +61,7 @@
             {
                 if ((artifactType & ArtifactType.Directories) == ArtifactType.Directories)
                 {
-                    if ((onDirArtifact?.Invoke(dirArtifact, dirContent) ?? true) && dirArtifact.Id != Guid.Empty)
+                    if (dirArtifact.Id != Guid.Empty && (onDirArtifact?.Invoke(dirArtifact, dirContent) ?? true))
                         // Return this folder only if that is not root folder 
                         yield return dirArtifact;
                 }
@@ -70,7 +70,7 @@
                 if (depthOption == DepthOption.Deep)
                 {
                     foreach (TDirArtifact dirInfo in dirContent.OfType<TDirArtifact>())
-                        foreach (var subDirInfo in CallArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, getArtifacts, artifactType, depthOption, onDirArtifact, onFileArtifact, onException))
+                        foreach (var subDirInfo in GetArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, getArtifacts, onDirArtifact, onFileArtifact, onException, depthOption, artifactType))
                             yield return subDirInfo;
                 }
 
