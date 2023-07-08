@@ -1,4 +1,4 @@
-﻿namespace TreeMiner.Tests
+﻿namespace TreeMine.Tests
 {
     public class TreeArtifactHash : ITreeArtifact
     {
