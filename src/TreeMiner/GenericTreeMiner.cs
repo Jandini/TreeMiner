@@ -4,6 +4,25 @@
     {
 
         /// <summary>
+        /// Create root artifact.
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="level"></param>
+        /// <param name="id"></param>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        public TTreeArtifact GetRootArtifact(TBaseArtifact root, int level = 0, Guid id = default, Guid parent = default)
+        {
+            return new TTreeArtifact()
+            {
+                Id = id,
+                Parent = parent,
+                Level = level,
+                Info = root,
+            };
+        }
+
+        /// <summary>
         /// Recursively dig through the directory tree and yield tree artifacts with parent-child relationships represented by GUIDs.
         /// </summary>
         /// <param name="dirArtifact">Root directory artifact.</param>
@@ -15,7 +34,7 @@
         /// <param name="onException">Exception handler. If not provided or false is returned then exception is throw and mining is interrupted.</param>
         /// <returns>Directory and file artifacts.</returns>
         /// <exception cref="ArtifactException"></exception>
-        public IEnumerable<TTreeArtifact> DigArtifacts(TTreeArtifact dirArtifact,
+        public IEnumerable<TTreeArtifact> GetArtifacts(TTreeArtifact dirArtifact,
             Func<TDirArtifact, IEnumerable<TBaseArtifact>> getArtifacts,
             ArtifactType artifactType = ArtifactType.All, 
             DepthOption depthOption = DepthOption.Deep,            
@@ -51,7 +70,7 @@
                 if (depthOption == DepthOption.Deep)
                 {
                     foreach (TDirArtifact dirInfo in dirContent.OfType<TDirArtifact>())
-                        foreach (var subDirInfo in DigArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, getArtifacts, artifactType, depthOption, onDirArtifact, onFileArtifact, onException))
+                        foreach (var subDirInfo in GetArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, getArtifacts, artifactType, depthOption, onDirArtifact, onFileArtifact, onException))
                             yield return subDirInfo;
                 }
 
@@ -80,7 +99,7 @@
         /// <param name="depthOption">Mining depth option. Deep is recursive, Shallow is top directory only.</param>
         /// <param name="exceptionAggregate"></param>
         /// <returns>Directory and file artifacts.</returns>
-        public IEnumerable<TTreeArtifact> DigArtifacts(TTreeArtifact dirArtifact,
+        public IEnumerable<TTreeArtifact> GetArtifacts(TTreeArtifact dirArtifact,
             Func<TDirArtifact, IEnumerable<TBaseArtifact>> getArtifacts,
             ArtifactType artifactType = ArtifactType.All,
             DepthOption depthOption = DepthOption.Deep,
@@ -113,7 +132,7 @@
                 if (depthOption == DepthOption.Deep)
                 {
                     foreach (TDirArtifact dirInfo in dirContent.OfType<TDirArtifact>())
-                        foreach (var subDirInfo in DigArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, getArtifacts, artifactType, depthOption, exceptionAggregate))
+                        foreach (var subDirInfo in GetArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, getArtifacts, artifactType, depthOption, exceptionAggregate))
                             yield return subDirInfo;
                 }
 
@@ -125,6 +144,6 @@
                         yield return new TTreeArtifact() { Id = Guid.NewGuid(), Parent = dirArtifact.Id, Level = dirArtifact.Level, Info = fileInfo };                                                
                 }
             }
-        }
+        }        
     }
 }

@@ -9,17 +9,12 @@ namespace TreeMiner.Tests
         public static IEnumerable<T> Dig<T>(string root) where T : ITreeArtifact, new()
         {
             var exceptionAggregate = new List<Exception>();
-
-            var rootArtifact = new T()
-            {
-                Info = new DirectoryInfo(root),
-                Id = Guid.Empty,
-                Parent = Guid.Empty
-            };
-
             var fileSystemMiner = new FileSystemMiner<T>();
 
-            foreach (var artifact in fileSystemMiner.DigFileSystem(dirArtifact: rootArtifact, exceptionAggregate: exceptionAggregate))
+            var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(root));
+
+
+            foreach (var artifact in fileSystemMiner.GetFileSystemArtifacts(dirArtifact: rootArtifact, exceptionAggregate: exceptionAggregate))
                 yield return artifact;
 
             if (exceptionAggregate.Any())
@@ -41,21 +36,18 @@ namespace TreeMiner.Tests
 
 
 
-        public static IEnumerable<TreeArtifactHash> Hash(string root) 
+        public static IEnumerable<TreeArtifactHash> Hash(string root)
         {
             var exceptionAggregate = new List<Exception>();
 
-            var rootArtifact = new TreeArtifactHash
-            {
-                Info = new DirectoryInfo(root),
-                Id = Guid.Empty,
-                Parent = Guid.Empty,
-                Hash = Convert.ToHexString(MD5.HashData(Array.Empty<byte>()))
-            };
-
             var fileSystemMiner = new FileSystemMiner<TreeArtifactHash>();
 
-            foreach (var artifact in fileSystemMiner.DigFileSystem(
+            var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(root));
+
+            rootArtifact.Hash = Convert.ToHexString(MD5.HashData(Array.Empty<byte>()));
+
+
+            foreach (var artifact in fileSystemMiner.GetFileSystemArtifacts(
                 dirArtifact: rootArtifact,
                 onDirArtifact: (dir, content) =>
                 {
