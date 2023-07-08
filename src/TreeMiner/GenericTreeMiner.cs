@@ -1,6 +1,6 @@
-﻿namespace TreeMine
+﻿namespace TreeMiner
 {
-    public class TreeMiner<TTreeArtifact, TBaseArtifact, TFileArtifact, TDirArtifact> where TTreeArtifact : ITreeArtifact, new() where TFileArtifact : class, TBaseArtifact where TDirArtifact : class, TBaseArtifact
+    public class GenericTreeMiner<TTreeArtifact, TBaseArtifact, TFileArtifact, TDirArtifact> where TTreeArtifact : ITreeArtifact, new() where TFileArtifact : class, TBaseArtifact where TDirArtifact : class, TBaseArtifact
     {
 
         /// <summary>
@@ -13,7 +13,6 @@
         /// <param name="onDirArtifact">Enrich and filter directory artifacts. If false is returned then artifact will not be returned.</param>
         /// <param name="onFileArtifact">Enrich and filter file artifacts.</param>
         /// <param name="onException">Exception handler. If not provided or false is returned then exception is throw and mining is interrupted.</param>
-        /// <param name="exceptionAggregate"></param>
         /// <returns>Directory and file artifacts.</returns>
         /// <exception cref="ArtifactException"></exception>
         public IEnumerable<TTreeArtifact> DigArtifacts(TTreeArtifact dirArtifact,
@@ -22,8 +21,7 @@
             DepthOption depthOption = DepthOption.Deep,            
             Func<TTreeArtifact, IEnumerable<TBaseArtifact>, bool>? onDirArtifact = null, 
             Func<TTreeArtifact, bool>? onFileArtifact = null, 
-            Func<Exception, bool>? onException = null, 
-            List<Exception>? exceptionAggregate = null) 
+            Func<Exception, bool>? onException = null) 
         {
             IEnumerable<TBaseArtifact>? dirContent = null;
 
@@ -35,9 +33,7 @@
             }
             catch (Exception ex)
             {
-                exceptionAggregate?.Add(new ArtifactException(ex, dirArtifact));
-
-                if (!(onException?.Invoke(ex) ?? exceptionAggregate != null))
+                if (!(onException?.Invoke(ex) ?? false))
                     throw new ArtifactException(ex, dirArtifact);
             }
 
@@ -55,7 +51,7 @@
                 if (depthOption == DepthOption.Deep)
                 {
                     foreach (TDirArtifact dirInfo in dirContent.OfType<TDirArtifact>())
-                        foreach (var subDirInfo in DigArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, getArtifacts, artifactType, depthOption, onDirArtifact, onFileArtifact, onException, exceptionAggregate))
+                        foreach (var subDirInfo in DigArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, getArtifacts, artifactType, depthOption, onDirArtifact, onFileArtifact, onException))
                             yield return subDirInfo;
                 }
 
