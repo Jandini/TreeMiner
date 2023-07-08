@@ -19,8 +19,8 @@
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>		
 		<PackageId>TreeMiner</PackageId>
-		<AssemblyName>TreeMine</AssemblyName>
-		<RootNamespace>TreeMine</RootNamespace>
+		<AssemblyName>TreeMiner</AssemblyName>
+		<RootNamespace>TreeMiner</RootNamespace>
 		<Description>Generic parent-child GUID generator that traverses directory tree, returning file and directory artifacts with assigned GUIDs.</Description>
 		<PackageTags>TreeMiner</PackageTags>
 		<RepositoryUrl>https://github.com/Jandini/TreeMiner</RepositoryUrl>

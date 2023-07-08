@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace TreeMine.Tests
+namespace TreeMiner.Tests
 {
     public class TreeMiner_Tests
     {
@@ -19,7 +19,7 @@ namespace TreeMine.Tests
 
             var fileSystemMiner = new FileSystemMiner<T>();
 
-            foreach (var artifact in fileSystemMiner.DigFileSystem(dirArtifact: rootArtifact, onFileArtifact: null, onException: null, exceptionAggregate: exceptionAggregate))
+            foreach (var artifact in fileSystemMiner.DigFileSystem(dirArtifact: rootArtifact, exceptionAggregate: exceptionAggregate))
                 yield return artifact;
 
             if (exceptionAggregate.Any())
@@ -56,7 +56,7 @@ namespace TreeMine.Tests
             var fileSystemMiner = new FileSystemMiner<TreeArtifactHash>();
 
             foreach (var artifact in fileSystemMiner.DigFileSystem(
-                dirArtifact: rootArtifact,                 
+                dirArtifact: rootArtifact,
                 onDirArtifact: (dir, content) =>
                 {
                     var list = string.Join(';', content.OrderBy(a => a.Name).Select(s => string.Join(',', s.Name, (s as FileInfo)?.Length ?? 0)));
@@ -65,13 +65,11 @@ namespace TreeMine.Tests
                     return true;
                 },
                 artifactType: ArtifactType.Directories,
-                onFileArtifact: null, 
-
-                onException: null, 
-                exceptionAggregate: exceptionAggregate))
-
-
+                onFileArtifact: null,
+                onException: (exception) => { exceptionAggregate.Add(exception); return true; })) 
+            {
                 yield return artifact;
+            }
 
             if (exceptionAggregate.Any())
                 throw new AggregateException(exceptionAggregate);
