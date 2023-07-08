@@ -1,4 +1,4 @@
-﻿namespace TreeMiner
+﻿namespace TreeMine
 {
     public class ArtifactException : Exception
     {

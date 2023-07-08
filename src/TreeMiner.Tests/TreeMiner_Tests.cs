@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace TreeMiner.Tests
+namespace TreeMine.Tests
 {
     public class TreeMiner_Tests
     {

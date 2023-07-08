@@ -1,4 +1,4 @@
-﻿namespace TreeMiner.Tests
+﻿namespace TreeMine.Tests
 {
 
     public class FileSystemMiner<TTreeArtifact> : TreeMiner<TTreeArtifact, FileSystemInfo, FileInfo, DirectoryInfo> where TTreeArtifact : ITreeArtifact, new()

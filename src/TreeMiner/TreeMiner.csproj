@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
@@ -19,9 +19,9 @@
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>		
 		<PackageId>TreeMiner</PackageId>
-		<AssemblyName>TreeMiner</AssemblyName>
-		<RootNamespace>TreeMiner</RootNamespace>
-		<Description>TreeMiner</Description>
+		<AssemblyName>TreeMine</AssemblyName>
+		<RootNamespace>TreeMine</RootNamespace>
+		<Description>Generic parent-child GUID generator that traverses directory tree, returning file and directory artifacts with assigned GUIDs.</Description>
 		<PackageTags>TreeMiner</PackageTags>
 		<RepositoryUrl>https://github.com/Jandini/TreeMiner</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/Jandini/TreeMiner</PackageProjectUrl>

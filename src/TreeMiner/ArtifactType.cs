@@ -1,4 +1,4 @@
-﻿namespace TreeMiner
+﻿namespace TreeMine
 {
     [Flags]
     public enum ArtifactType

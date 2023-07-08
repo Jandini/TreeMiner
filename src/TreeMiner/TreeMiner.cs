@@ -1,4 +1,4 @@
-﻿namespace TreeMiner
+﻿namespace TreeMine
 {
     public class TreeMiner<TTreeArtifact, TBaseArtifact, TFileArtifact, TDirArtifact> where TTreeArtifact : ITreeArtifact, new() where TFileArtifact : class, TBaseArtifact where TDirArtifact : class, TBaseArtifact
     {
