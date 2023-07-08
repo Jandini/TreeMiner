@@ -34,7 +34,7 @@
         /// <param name="onException">Exception handler. If not provided or false is returned then exception is throw and mining is interrupted.</param>
         /// <returns>Directory and file artifacts.</returns>
         /// <exception cref="ArtifactException"></exception>
-        public IEnumerable<TTreeArtifact> GetArtifacts(TTreeArtifact dirArtifact,
+        public IEnumerable<TTreeArtifact> CallArtifacts(TTreeArtifact dirArtifact,
             Func<TDirArtifact, IEnumerable<TBaseArtifact>> getArtifacts,
             ArtifactType artifactType = ArtifactType.All, 
             DepthOption depthOption = DepthOption.Deep,            
@@ -70,7 +70,7 @@
                 if (depthOption == DepthOption.Deep)
                 {
                     foreach (TDirArtifact dirInfo in dirContent.OfType<TDirArtifact>())
-                        foreach (var subDirInfo in GetArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, getArtifacts, artifactType, depthOption, onDirArtifact, onFileArtifact, onException))
+                        foreach (var subDirInfo in CallArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, getArtifacts, artifactType, depthOption, onDirArtifact, onFileArtifact, onException))
                             yield return subDirInfo;
                 }
 
@@ -101,9 +101,9 @@
         /// <returns>Directory and file artifacts.</returns>
         public IEnumerable<TTreeArtifact> GetArtifacts(TTreeArtifact dirArtifact,
             Func<TDirArtifact, IEnumerable<TBaseArtifact>> getArtifacts,
+            List<Exception> exceptionAggregate,
             ArtifactType artifactType = ArtifactType.All,
-            DepthOption depthOption = DepthOption.Deep,
-            List<Exception>? exceptionAggregate = null)
+            DepthOption depthOption = DepthOption.Deep)
         {
             IEnumerable<TBaseArtifact>? dirContent = null;
 
@@ -115,7 +115,7 @@
             }
             catch (Exception ex)
             {
-                exceptionAggregate?.Add(new ArtifactException(ex, dirArtifact));
+                exceptionAggregate.Add(new ArtifactException(ex, dirArtifact));
             }
 
             // Check if the content was retrivied successfully. The dirContent can be null if exception handler call back is provided.
@@ -132,7 +132,7 @@
                 if (depthOption == DepthOption.Deep)
                 {
                     foreach (TDirArtifact dirInfo in dirContent.OfType<TDirArtifact>())
-                        foreach (var subDirInfo in GetArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, getArtifacts, artifactType, depthOption, exceptionAggregate))
+                        foreach (var subDirInfo in GetArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, getArtifacts, exceptionAggregate, artifactType, depthOption))
                             yield return subDirInfo;
                 }
 
@@ -141,9 +141,9 @@
                 {
                     // Create and return file artifacts found in directory content
                     foreach (TFileArtifact fileInfo in dirContent.OfType<TFileArtifact>())
-                        yield return new TTreeArtifact() { Id = Guid.NewGuid(), Parent = dirArtifact.Id, Level = dirArtifact.Level, Info = fileInfo };                                                
+                        yield return new TTreeArtifact() { Id = Guid.NewGuid(), Parent = dirArtifact.Id, Level = dirArtifact.Level, Info = fileInfo };
                 }
             }
-        }        
+        }
     }
 }

@@ -6,15 +6,14 @@ namespace TreeMiner.Tests
     public class TreeMiner_Tests
     {
 
-        public static IEnumerable<T> Dig<T>(string root) where T : ITreeArtifact, new()
+        public static IEnumerable<T> GetArtifacts<T>(string root) where T : ITreeArtifact, new()
         {
             var exceptionAggregate = new List<Exception>();
+            
             var fileSystemMiner = new FileSystemMiner<T>();
+            var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(root));            
 
-            var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(root));
-
-
-            foreach (var artifact in fileSystemMiner.GetFileSystemArtifacts(dirArtifact: rootArtifact, exceptionAggregate: exceptionAggregate))
+            foreach (var artifact in fileSystemMiner.GetArtifacts(rootArtifact, (dirInfo) => dirInfo.GetFileSystemInfos()))
                 yield return artifact;
 
             if (exceptionAggregate.Any())
@@ -25,7 +24,7 @@ namespace TreeMiner.Tests
         [Fact]
         public void DigFileSystemTest()
         {
-            var artifacts = Dig<TreeArtifact>(Environment.SystemDirectory);
+            var artifacts = GetArtifacts<TreeArtifact>(Environment.SystemDirectory);
 
 
             foreach (var artifact in artifacts)
