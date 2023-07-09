@@ -88,6 +88,9 @@ namespace TreeMiner.Tests
 
             var artifacts = fileSystemMiner.GetArtifacts(rootArtifact, fileSystemExcavator, depthOption: DepthOption.Deep, artifactType: ArtifactType.Directories);
 
+
+            var count = artifacts.Count();
+
             foreach (var artifact in artifacts)
             {
                 Assert.NotNull(artifact);
