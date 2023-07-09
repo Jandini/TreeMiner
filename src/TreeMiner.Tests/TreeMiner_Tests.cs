@@ -6,25 +6,20 @@ namespace TreeMiner.Tests
     public class TreeMiner_Tests
     {
 
-        public static IEnumerable<T> GetArtifacts<T>(string root) where T : ITreeArtifact, new()
-        {
-            var exceptionAggregate = new List<Exception>();
-            
+        public static IEnumerable<T> GetFileSystemArtifacts<T>(string root) where T : ITreeArtifact, new()
+        {            
             var fileSystemMiner = new FileSystemMiner<T>();
-            var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(root));            
+            var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(root));
 
             foreach (var artifact in fileSystemMiner.GetArtifacts(rootArtifact, (dirInfo) => dirInfo.GetFileSystemInfos()))
-                yield return artifact;
-
-            if (exceptionAggregate.Any())
-                throw new AggregateException(exceptionAggregate);
+                yield return artifact;            
         }
 
 
         [Fact]
         public void DigFileSystemTest()
         {
-            var artifacts = GetArtifacts<TreeArtifact>(Environment.SystemDirectory);
+            var artifacts = GetFileSystemArtifacts<FileSystemArtifact>(Environment.SystemDirectory);
 
 
             foreach (var artifact in artifacts)
@@ -35,11 +30,11 @@ namespace TreeMiner.Tests
 
 
 
-        public static IEnumerable<TreeArtifactHash> Hash(string root)
+        public static IEnumerable<FileSystemArtifactHash> HashFunc(string root)
         {
             var exceptionAggregate = new List<Exception>();
 
-            var fileSystemMiner = new FileSystemMiner<TreeArtifactHash>();
+            var fileSystemMiner = new FileSystemMiner<FileSystemArtifactHash>();
 
             var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(root));
 
@@ -67,11 +62,55 @@ namespace TreeMiner.Tests
         }
 
 
+
         [Fact]
         public void HashDirsTest()
         {
 
-            var artifacts = Hash(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
+            var artifacts = HashFunc(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
+
+            foreach (var artifact in artifacts)
+            {
+                Assert.NotNull(artifact);
+            }
+        }
+
+
+
+        [Fact]
+        public void ExcavatorDirsTest()
+        {
+            var fileSystemMiner = new FileSystemMiner<FileSystemArtifactHash>();
+            var fileSystemExcavator = new FileSystemExcavatorHash();
+
+            var rootDir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
+            var rootArtifact = fileSystemMiner.GetRootArtifact(rootDir);
+
+            var artifacts = fileSystemMiner.GetArtifacts(rootArtifact, fileSystemExcavator);
+
+
+            var count = artifacts.Count();
+
+            foreach (var artifact in artifacts)
+            {
+                Assert.NotNull(artifact);
+            }
+        }
+
+
+
+        [Fact]
+        public void GenericFileSystemTest()
+        {
+            var rootPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            var fileSystemMiner = new GenericTreeMiner<FileSystemArtifact, FileSystemInfo, FileInfo, DirectoryInfo>();
+            var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(rootPath));
+            
+            var artifacts = fileSystemMiner.GetArtifacts(rootArtifact, (dirInfo) => dirInfo.GetFileSystemInfos());
+
+
+            var count = artifacts.Count();
 
             foreach (var artifact in artifacts)
             {
