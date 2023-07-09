@@ -86,7 +86,7 @@ namespace TreeMiner.Tests
             var rootDir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
             var rootArtifact = fileSystemMiner.GetRootArtifact(rootDir);
 
-            var artifacts = fileSystemMiner.GetArtifacts(rootArtifact, fileSystemExcavator, depthOption: DepthOption.Deep, artifactType: ArtifactType.Directories);
+            var artifacts = fileSystemMiner.GetArtifacts(rootArtifact, fileSystemExcavator);
 
 
             var count = artifacts.Count();
