@@ -1,16 +1,26 @@
 ﻿namespace TreeMiner
 {
-    public class GenericTreeMiner<TTreeArtifact, TBaseArtifact, TFileArtifact, TDirArtifact> where TTreeArtifact : ITreeArtifact, new() where TFileArtifact : class, TBaseArtifact where TDirArtifact : class, TBaseArtifact
+    /// <summary>
+    /// Generic tree miner class for retrieving directory and file artifacts from a tree structure.
+    /// </summary>
+    /// <typeparam name="TTreeArtifact">The type of the tree artifacts.</typeparam>
+    /// <typeparam name="TBaseArtifact">The base type of the artifacts.</typeparam>
+    /// <typeparam name="TFileArtifact">The type of the file artifacts, derived from TBaseArtifact.</typeparam>
+    /// <typeparam name="TDirArtifact">The type of the directory artifacts, derived from TBaseArtifact.</typeparam> 
+    public class GenericTreeMiner<TTreeArtifact, TBaseArtifact, TFileArtifact, TDirArtifact> 
+        where TTreeArtifact : ITreeArtifact, new() 
+        where TFileArtifact : class, TBaseArtifact 
+        where TDirArtifact : class, TBaseArtifact
     {
 
         /// <summary>
-        /// Create root artifact.
+        /// Create a root artifact.
         /// </summary>
-        /// <param name="root"></param>
-        /// <param name="level"></param>
-        /// <param name="id"></param>
-        /// <param name="parent"></param>
-        /// <returns></returns>
+        /// <param name="root">The base artifact representing the root.</param>
+        /// <param name="level">The level of the root artifact in the tree. Default is 0.</param>
+        /// <param name="id">The unique identifier for the root artifact. Default is default(Guid).</param>
+        /// <param name="parent">The unique identifier of the parent artifact. Default is default(Guid).</param>
+        /// <returns>The root artifact.</returns>
         public TTreeArtifact GetRootArtifact(TBaseArtifact root, int level = 0, Guid id = default, Guid parent = default)
         {
             return new TTreeArtifact()
@@ -22,18 +32,20 @@
             };
         }
 
+
+
         /// <summary>
-        /// Recursively dig through the directory tree and yield tree artifacts with parent-child relationships represented by GUIDs.
+        /// Retrieves directory and file artifacts from the tree based on the root directory artifact.
         /// </summary>
-        /// <param name="dirArtifact">Root directory artifact.</param>
-        /// <param name="getArtifacts"></param>
-        /// <param name="artifactType"></param>
-        /// <param name="depthOption"></param>
-        /// <param name="onDirArtifact">Enrich and filter directory artifacts. If false is returned then artifact will not be returned.</param>
-        /// <param name="onFileArtifact">Enrich and filter file artifacts.</param>
-        /// <param name="onException">Exception handler. If not provided or false is returned then exception is throw and mining is interrupted.</param>
-        /// <returns>Directory and file artifacts.</returns>
-        /// <exception cref="ArtifactException"></exception>
+        /// <param name="dirArtifact">The root directory artifact.</param>
+        /// <param name="getArtifacts">Function to retrieve artifacts for a given directory.</param>
+        /// <param name="onDirArtifact">Callback to enrich and filter directory artifacts. Return false to exclude an artifact.</param>
+        /// <param name="onFileArtifact">Callback to enrich and filter file artifacts.</param>
+        /// <param name="onException">Callback to handle exceptions. Return false to interrupt the mining process.</param>
+        /// <param name="depthOption">The depth option for mining. Default is DepthOption.Deep.</param>
+        /// <param name="artifactType">The type of artifacts to include. Default is ArtifactType.All.</param>
+        /// <returns>An enumerable collection of directory and file artifacts.</returns>
+        /// <exception cref="ArtifactException">Thrown when an exception occurs and onException callback does not handle it.</exception>
         public IEnumerable<TTreeArtifact> GetArtifacts(TTreeArtifact dirArtifact,
             Func<TDirArtifact, IEnumerable<TBaseArtifact>> getArtifacts,
             Func<TTreeArtifact, IEnumerable<TBaseArtifact>, bool>? onDirArtifact,
@@ -89,7 +101,16 @@
         }
 
 
-     
+
+        /// <summary>
+        /// Retrieves directory and file artifacts from the tree based on the root directory artifact using the specified tree excavator.
+        /// </summary>
+        /// <param name="dirArtifact">The root directory artifact.</param>
+        /// <param name="treeExcavator">The tree excavator to use for mining artifacts.</param>
+        /// <param name="depthOption">The depth option for mining. Default is DepthOption.Deep.</param>
+        /// <param name="artifactType">The type of artifacts to include. Default is ArtifactType.All.</param>
+        /// <returns>An enumerable collection of directory and file artifacts.</returns>
+        /// <exception cref="ArtifactException">Thrown when an exception occurs during artifact retrieval.</exception>
         public IEnumerable<TTreeArtifact> GetArtifacts(TTreeArtifact dirArtifact,            
             ITreeExcavator<TTreeArtifact, TBaseArtifact, TFileArtifact, TDirArtifact> treeExcavator,
             DepthOption depthOption = DepthOption.Deep,
