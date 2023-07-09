@@ -16,7 +16,7 @@
             return new TTreeArtifact()
             {
                 Id = id,
-                Parent = parent,
+                ParentId = parent,
                 Level = level,
                 Info = root,
             };
@@ -70,7 +70,7 @@
                 if (depthOption == DepthOption.Deep)
                 {
                     foreach (TDirArtifact dirInfo in dirContent.OfType<TDirArtifact>())
-                        foreach (var subDirInfo in GetArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, getArtifacts, onDirArtifact, onFileArtifact, onException, depthOption, artifactType))
+                        foreach (var subDirInfo in GetArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, ParentId = dirArtifact.Id, Info = dirInfo }, getArtifacts, onDirArtifact, onFileArtifact, onException, depthOption, artifactType))
                             yield return subDirInfo;
                 }
 
@@ -80,7 +80,7 @@
                     // Create and return file artifacts found in directory content
                     foreach (TFileArtifact fileInfo in dirContent.OfType<TFileArtifact>())
                     {
-                        var fileArtifact = new TTreeArtifact() { Id = Guid.NewGuid(), Parent = dirArtifact.Id, Level = dirArtifact.Level, Info = fileInfo };
+                        var fileArtifact = new TTreeArtifact() { Id = Guid.NewGuid(), ParentId = dirArtifact.Id, Level = dirArtifact.Level, Info = fileInfo };
                         if (onFileArtifact?.Invoke(fileArtifact) ?? true)
                             yield return fileArtifact;
                     }
@@ -123,7 +123,7 @@
                 if (depthOption == DepthOption.Deep)
                 {
                     foreach (TDirArtifact dirInfo in dirContent.OfType<TDirArtifact>())
-                        foreach (var subDirInfo in GetArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, treeExcavator, depthOption, artifactType))                            
+                        foreach (var subDirInfo in GetArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, ParentId = dirArtifact.Id, Info = dirInfo }, treeExcavator, depthOption, artifactType))                            
                             yield return subDirInfo;
                 }
 
@@ -133,7 +133,7 @@
                     // Create and return file artifacts found in directory content
                     foreach (TFileArtifact fileInfo in dirContent.OfType<TFileArtifact>())
                     {
-                        var fileArtifact = new TTreeArtifact() { Id = Guid.NewGuid(), Parent = dirArtifact.Id, Level = dirArtifact.Level, Info = fileInfo };                        
+                        var fileArtifact = new TTreeArtifact() { Id = Guid.NewGuid(), ParentId = dirArtifact.Id, Level = dirArtifact.Level, Info = fileInfo };                        
                         if (treeExcavator.OnFileArtifact(fileArtifact))
                             yield return fileArtifact;
                     }
@@ -185,7 +185,7 @@
                 if (depthOption == DepthOption.Deep)
                 {
                     foreach (TDirArtifact dirInfo in dirContent.OfType<TDirArtifact>())
-                        foreach (var subDirInfo in GetArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, Parent = dirArtifact.Id, Info = dirInfo }, getArtifacts, exceptionAggregate, artifactType, depthOption))
+                        foreach (var subDirInfo in GetArtifacts(new TTreeArtifact() { Id = Guid.NewGuid(), Level = dirArtifact.Level + 1, ParentId = dirArtifact.Id, Info = dirInfo }, getArtifacts, exceptionAggregate, artifactType, depthOption))
                             yield return subDirInfo;
                 }
 
@@ -194,7 +194,7 @@
                 {
                     // Create and return file artifacts found in directory content
                     foreach (TFileArtifact fileInfo in dirContent.OfType<TFileArtifact>())
-                        yield return new TTreeArtifact() { Id = Guid.NewGuid(), Parent = dirArtifact.Id, Level = dirArtifact.Level, Info = fileInfo };
+                        yield return new TTreeArtifact() { Id = Guid.NewGuid(), ParentId = dirArtifact.Id, Level = dirArtifact.Level, Info = fileInfo };
                 }
             }
         }
