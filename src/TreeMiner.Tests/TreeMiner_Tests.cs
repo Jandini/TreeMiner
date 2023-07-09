@@ -96,5 +96,26 @@ namespace TreeMiner.Tests
                 Assert.NotNull(artifact);
             }
         }
+
+
+
+        [Fact]
+        public void GenericFileSystemTest()
+        {
+            var rootPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            var fileSystemMiner = new GenericTreeMiner<FileSystemArtifact, FileSystemInfo, FileInfo, DirectoryInfo>();
+            var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(rootPath));
+            
+            var artifacts = fileSystemMiner.GetArtifacts(rootArtifact, (dirInfo) => dirInfo.GetFileSystemInfos());
+
+
+            var count = artifacts.Count();
+
+            foreach (var artifact in artifacts)
+            {
+                Assert.NotNull(artifact);
+            }
+        }
     }
 }
