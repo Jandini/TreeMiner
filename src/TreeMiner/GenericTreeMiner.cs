@@ -8,7 +8,7 @@
     /// <typeparam name="TFileArtifact">The type of the file artifacts, derived from TBaseArtifact.</typeparam>
     /// <typeparam name="TDirArtifact">The type of the directory artifacts, derived from TBaseArtifact.</typeparam> 
     public class GenericTreeMiner<TTreeArtifact, TBaseArtifact, TFileArtifact, TDirArtifact>
-        where TTreeArtifact : ITreeArtifact, new()
+        where TTreeArtifact : ITreeArtifact<TBaseArtifact>, new()
         where TFileArtifact : class, TBaseArtifact
         where TDirArtifact : class, TBaseArtifact
     {
@@ -65,7 +65,7 @@
             catch (Exception ex)
             {
                 if (!(onException?.Invoke(ex) ?? false))
-                    throw new ArtifactException(ex, dirArtifact);
+                    throw new ArtifactException<TBaseArtifact>(ex, dirArtifact);
             }
 
             // Check if the content was retrivied successfully. The dirContent can be null if exception handler call back is provided.
@@ -122,7 +122,7 @@
             catch (Exception ex)
             {
                 if (!treeExcavator.OnException(ex))
-                    throw new ArtifactException(ex, dirArtifact);
+                    throw new ArtifactException<TBaseArtifact>(ex, dirArtifact);
             }
 
             // Check if the content was retrivied successfully. The dirContent can be null if exception handler call back is provided.
@@ -178,7 +178,7 @@
             catch (Exception ex)
             {
                 if (!treeExcavator.OnException(ex))
-                    throw new ArtifactException(ex, dirArtifact);
+                    throw new ArtifactException<TBaseArtifact>(ex, dirArtifact);
             }
 
             // Check if the content was retrivied successfully. The dirContent can be null if exception handler call back is provided.
@@ -230,7 +230,7 @@
             }
             catch (Exception ex)
             {
-                exceptionAggregate.Add(new ArtifactException(ex, dirArtifact));
+                exceptionAggregate.Add(new ArtifactException<TBaseArtifact>(ex, dirArtifact));
             }
 
             // Check if the content was retrivied successfully. The dirContent can be null if exception handler call back is provided.

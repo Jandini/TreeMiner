@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a tree artifact in the tree mining process.
     /// </summary>
-    public interface ITreeArtifact
+    public interface ITreeArtifact<TBaseArtifact> 
     {
         /// <summary>
         /// Gets or sets the unique identifier of the artifact.
@@ -23,6 +23,6 @@
         /// <summary>
         /// Gets or sets additional information associated with the artifact.
         /// </summary>
-        object? Info { get; set; }
+        TBaseArtifact? Info { get; set; }
     }
 }
