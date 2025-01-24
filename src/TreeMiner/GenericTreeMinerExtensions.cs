@@ -17,7 +17,7 @@
         /// <returns>An enumerable collection of directory and file artifacts.</returns>
         /// <exception cref="AggregateException">Thrown when one or more exceptions occur during artifact retrieval.</exception>
         public static IEnumerable<TTreeArtifact> GetArtifacts<TTreeArtifact, TBaseArtifact, TFileArtifact, TDirArtifact>(this GenericTreeMiner<TTreeArtifact, TBaseArtifact, TFileArtifact, TDirArtifact> miner, TTreeArtifact dirArtifact, Func<TDirArtifact, IEnumerable<TBaseArtifact>> getArtifacts, ArtifactType artifactType = ArtifactType.All, DepthOption depthOption = DepthOption.Deep) 
-            where TTreeArtifact : ITreeArtifact, new() 
+            where TTreeArtifact : ITreeArtifact<TBaseArtifact>, new() 
             where TFileArtifact : class, TBaseArtifact 
             where TDirArtifact : class, TBaseArtifact
         {

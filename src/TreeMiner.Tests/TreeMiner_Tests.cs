@@ -6,7 +6,7 @@ namespace TreeMiner.Tests
     public class TreeMiner_Tests
     {
 
-        public static IEnumerable<T> GetFileSystemArtifacts<T>(string root) where T : ITreeArtifact, new()
+        public static IEnumerable<T> GetFileSystemArtifacts<T>(string root) where T : ITreeArtifact<FileSystemInfo>, new()
         {            
             var fileSystemMiner = new FileSystemMiner<T>();
             var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(root));

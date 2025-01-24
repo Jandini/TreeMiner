@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a file system artifact in a directory tree.
 /// </summary>
-public class FileSystemArtifact : ITreeArtifact
+public class FileSystemArtifact : ITreeArtifact<FileSystemInfo>
 {
     /// <summary>
     /// Gets or sets the unique identifier of the artifact.
@@ -23,5 +23,5 @@ public class FileSystemArtifact : ITreeArtifact
     /// <summary>
     /// Gets or sets additional information associated with the artifact.
     /// </summary>
-    public object? Info { get; set; }
+    public FileSystemInfo? Info { get; set; }
 }

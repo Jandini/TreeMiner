@@ -1,7 +1,7 @@
 ﻿namespace TreeMiner
 {
     public interface ITreeExcavator<TTreeArtifact, TBaseArtifact, TFileArtifact, TDirArtifact>
-        where TTreeArtifact : ITreeArtifact, new()
+        where TTreeArtifact : ITreeArtifact<TBaseArtifact>, new()
         where TFileArtifact : class, TBaseArtifact
         where TDirArtifact : class, TBaseArtifact
     {
