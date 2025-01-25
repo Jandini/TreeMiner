@@ -35,7 +35,8 @@ public class FileSystemArtifact : ITreeArtifact<FileSystemInfo>
     /// Gets or sets additional information associated with the artifact.
     /// </summary>
     public FileSystemInfo Info { get; set; }
-}```
+}
+```
 
 
 
