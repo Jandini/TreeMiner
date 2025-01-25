@@ -46,32 +46,17 @@ Use `GenericTreeMiner` to recursively retrieve directory and file artifacts from
 // See https://aka.ms/new-console-template for more information
 using TreeMiner;
 
-        var rootPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+var rootPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-        var fileSystemMiner = new GenericTreeMiner<FileSystemArtifact, FileSystemInfo, FileInfo, DirectoryInfo>();
-        var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(rootPath));
+var fileSystemMiner = new GenericTreeMiner<FileSystemArtifact, FileSystemInfo, FileInfo, DirectoryInfo>();
+var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(rootPath));
 
-        var artifacts = fileSystemMiner.GetArtifacts(rootArtifact, (dirInfo) => dirInfo.GetFileSystemInfos());
+var artifacts = fileSystemMiner.GetArtifacts(rootArtifact, (dirInfo) => dirInfo.GetFileSystemInfos());
 
-        foreach (var artifact in artifacts)
-            Console.WriteLine($"{artifact.Id} {artifact.ParentId} [{artifact.Info.FullName}]");
+foreach (var artifact in artifacts)
+    Console.WriteLine($"{artifact.Id} {artifact.ParentId} [{artifact.Info.FullName}]");
 ```
 
-
-
-The result looks like this:
-
-```
-ebec840e-ef89-47b0-93da-f63f5a4c2a2b 00000000-0000-0000-0000-000000000000 C:\Users\Matt\Desktop\Holiday Hack 2022
-aef40c2f-c980-418e-9595-512e99a19f20 ebec840e-ef89-47b0-93da-f63f5a4c2a2b C:\Users\Matt\Desktop\Holiday Hack 2022\Wallet.md
-4713e949-b89d-49d5-8d93-50b4c4afa04a 00000000-0000-0000-0000-000000000000 C:\Users\Matt\Desktop\speedtest
-afd22f57-c427-44ad-8536-901a5341f92d 4713e949-b89d-49d5-8d93-50b4c4afa04a C:\Users\Matt\Desktop\speedtest\14_06_13-03-2023.png
-b3c1d75b-2c8d-4fd4-949a-b588fdf2f0b4 4713e949-b89d-49d5-8d93-50b4c4afa04a C:\Users\Matt\Desktop\speedtest\14_08_13-03-2023.png
-5953090d-cbfc-47c6-9f3f-6c3e39da477e 4713e949-b89d-49d5-8d93-50b4c4afa04a C:\Users\Matt\Desktop\speedtest\18_06_2013_17-15.png
-307e31aa-768b-43b8-8a58-f12dce9fee60 4713e949-b89d-49d5-8d93-50b4c4afa04a C:\Users\Matt\Desktop\speedtest\23_03_12-03-2023.png
-e14f50aa-a980-4979-b5bb-8d1853c96d4a 4713e949-b89d-49d5-8d93-50b4c4afa04a C:\Users\Matt\Desktop\speedtest\fix 1.png
-06620fef-af7b-4575-9d3e-ec644b34ba73 4713e949-b89d-49d5-8d93-50b4c4afa04a C:\Users\Matt\Desktop\speedtest\fix 2.png
-```
 
 
 
