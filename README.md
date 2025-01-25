@@ -12,10 +12,9 @@ Recursively enumerate file system tree and retrieve file and folders with id and
 Create class that will represent `ITreeArtifact` interface. 
 
 ```c#
-/// <summary>
-/// Represents a file system artifact in a directory tree.
-/// </summary>
-public class FileSystemArtifact : ITreeArtifact
+using TreeMiner;
+
+public class FileSystemArtifact : ITreeArtifact<FileSystemInfo>
 {
     /// <summary>
     /// Gets or sets the unique identifier of the artifact.
@@ -35,9 +34,8 @@ public class FileSystemArtifact : ITreeArtifact
     /// <summary>
     /// Gets or sets additional information associated with the artifact.
     /// </summary>
-    public object? Info { get; set; }
-}
-```
+    public FileSystemInfo Info { get; set; }
+}```
 
 
 
@@ -48,15 +46,15 @@ Use `GenericTreeMiner` to recursively retrieve directory and file artifacts from
 // See https://aka.ms/new-console-template for more information
 using TreeMiner;
 
-var rootPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        var rootPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-var fileSystemMiner = new GenericTreeMiner<FileSystemArtifact, FileSystemInfo, FileInfo, DirectoryInfo>();
-var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(rootPath));
+        var fileSystemMiner = new GenericTreeMiner<FileSystemArtifact, FileSystemInfo, FileInfo, DirectoryInfo>();
+        var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(rootPath));
 
-var artifacts = fileSystemMiner.GetArtifacts(rootArtifact, (dirInfo) => dirInfo.GetFileSystemInfos());
+        var artifacts = fileSystemMiner.GetArtifacts(rootArtifact, (dirInfo) => dirInfo.GetFileSystemInfos());
 
-foreach (var artifact in artifacts)
-	Console.WriteLine($"{artifact.Id} {artifact.ParentId} [{(artifact.Info as FileSystemInfo)?.FullName}]");
+        foreach (var artifact in artifacts)
+            Console.WriteLine($"{artifact.Id} {artifact.ParentId} [{artifact.Info.FullName}]");
 ```
 
 
