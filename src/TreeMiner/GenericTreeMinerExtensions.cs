@@ -21,7 +21,7 @@
             where TFileArtifact : class, TBaseArtifact 
             where TDirArtifact : class, TBaseArtifact
         {
-            var exceptionAggregate = new List<Exception>();
+            var exceptionAggregate = new List<ArtifactException<TBaseArtifact>>();
             
             foreach (var artifact in miner.GetArtifacts(dirArtifact, getArtifacts, exceptionAggregate, artifactType, depthOption))
                 yield return artifact;

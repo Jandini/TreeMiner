@@ -50,7 +50,7 @@
             Func<TDirArtifact, IEnumerable<TBaseArtifact>> getArtifacts,
             Func<TTreeArtifact, IEnumerable<TBaseArtifact>, bool>? onDirArtifact,
             Func<TTreeArtifact, bool>? onFileArtifact,
-            Func<Exception, bool>? onException,
+            Func<ArtifactException<TBaseArtifact>, bool>? onException,
             DepthOption depthOption = DepthOption.Deep,
             ArtifactType artifactType = ArtifactType.All)
         {
@@ -64,7 +64,7 @@
             }
             catch (Exception ex)
             {
-                if (!(onException?.Invoke(ex) ?? false))
+                if (!(onException?.Invoke(new ArtifactException<TBaseArtifact>(ex, dirArtifact)) ?? false))
                     throw new ArtifactException<TBaseArtifact>(ex, dirArtifact);
             }
 
@@ -121,7 +121,7 @@
             }
             catch (Exception ex)
             {
-                if (!treeExcavator.OnException(ex))
+                if (!treeExcavator.OnException(new ArtifactException<TBaseArtifact>(ex, dirArtifact)))
                     throw new ArtifactException<TBaseArtifact>(ex, dirArtifact);
             }
 
@@ -177,7 +177,7 @@
             }
             catch (Exception ex)
             {
-                if (!treeExcavator.OnException(ex))
+                if (!treeExcavator.OnException(new ArtifactException<TBaseArtifact>(ex, dirArtifact)))
                     throw new ArtifactException<TBaseArtifact>(ex, dirArtifact);
             }
 
@@ -216,7 +216,7 @@
         /// <returns>Directory and file artifacts.</returns>
         public IEnumerable<TTreeArtifact> GetArtifacts(TTreeArtifact dirArtifact,
             Func<TDirArtifact, IEnumerable<TBaseArtifact>> getArtifacts,
-            List<Exception> exceptionAggregate,
+            List<ArtifactException<TBaseArtifact>> exceptionAggregate,
             ArtifactType artifactType = ArtifactType.All,
             DepthOption depthOption = DepthOption.Deep)
         {

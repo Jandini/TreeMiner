@@ -32,6 +32,6 @@
         /// </summary>
         /// <param name="exception">Exception that occurred</param>
         /// <returns>Return true to continue tree mining, false to break</returns>
-        public bool OnException(Exception exception);
+        public bool OnException(ArtifactException<TBaseArtifact> exception);
     }
 }
