@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TreeMiner", "TreeMiner\Tree
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeMiner.Tests", "TreeMiner.Tests\TreeMiner.Tests.csproj", "{88C6F798-55C7-4CD3-A706-D3EF771112A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeMiner.Cli", "TreeMiner.Cli\TreeMiner.Cli.csproj", "{9CFC2681-9A9F-48D2-8C7F-6C0C2CE45643}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{88C6F798-55C7-4CD3-A706-D3EF771112A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88C6F798-55C7-4CD3-A706-D3EF771112A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88C6F798-55C7-4CD3-A706-D3EF771112A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CFC2681-9A9F-48D2-8C7F-6C0C2CE45643}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CFC2681-9A9F-48D2-8C7F-6C0C2CE45643}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CFC2681-9A9F-48D2-8C7F-6C0C2CE45643}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CFC2681-9A9F-48D2-8C7F-6C0C2CE45643}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
