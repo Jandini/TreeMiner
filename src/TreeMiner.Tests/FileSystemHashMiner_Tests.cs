@@ -3,12 +3,12 @@ using System.Text;
 
 namespace TreeMiner.Tests
 {
-    public class TreeMiner_Tests
+    public class FileSystemHashMiner_Tests
     {
 
         public static IEnumerable<T> GetFileSystemArtifacts<T>(string root) where T : ITreeArtifact<FileSystemInfo>, new()
         {            
-            var fileSystemMiner = new FileSystemMiner<T>();
+            var fileSystemMiner = new FileSystemHashMiner<T>();
             var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(root));
 
             foreach (var artifact in fileSystemMiner.GetArtifacts(rootArtifact, (dirInfo) => dirInfo.GetFileSystemInfos()))
@@ -21,20 +21,16 @@ namespace TreeMiner.Tests
         {
             var artifacts = GetFileSystemArtifacts<FileSystemArtifact>(Environment.SystemDirectory);
 
-
-            foreach (var artifact in artifacts)
-            {
-                Assert.NotNull(artifact);
-            }
+            Assert.NotEmpty(artifacts);          
         }
 
 
 
-        public static IEnumerable<FileSystemArtifactHash> HashFunc(string root)
+        public static IEnumerable<FileSystemHashArtifact> HashFunc(string root)
         {
             var exceptionAggregate = new List<Exception>();
 
-            var fileSystemMiner = new FileSystemMiner<FileSystemArtifactHash>();
+            var fileSystemMiner = new FileSystemHashMiner<FileSystemHashArtifact>();
 
             var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(root));
 
@@ -80,8 +76,8 @@ namespace TreeMiner.Tests
         [Fact]
         public void ExcavatorDirsTest()
         {
-            var fileSystemMiner = new FileSystemMiner<FileSystemArtifactHash>();
-            var fileSystemExcavator = new FileSystemExcavatorHash();
+            var fileSystemMiner = new FileSystemHashMiner<FileSystemHashArtifact>();
+            var fileSystemExcavator = new FileSystemHashExcavator();
 
             var rootDir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
             var rootArtifact = fileSystemMiner.GetRootArtifact(rootDir);

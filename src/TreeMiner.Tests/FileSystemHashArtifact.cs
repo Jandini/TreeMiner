@@ -1,6 +1,6 @@
 ﻿namespace TreeMiner.Tests
 {
-    public class FileSystemArtifactHash : ITreeArtifact<FileSystemInfo>
+    public class FileSystemHashArtifact : ITreeArtifact<FileSystemInfo>
     {
         public Guid Id { get; set; }
         public Guid ParentId { get; set; }
