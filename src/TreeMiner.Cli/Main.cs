@@ -17,8 +17,7 @@ internal class Main(
         //var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(rootPath));
 
         //var artifacts = fileSystemMiner.GetArtifacts(rootArtifact, (dirInfo) => new List<FileSystemInfo>().AddRange(dirInfo.GetDirectories()).ToArray());
-
-
+    
         var artifacts = FileSystemMiner.GetArtifacts(rootPath, excavator, cancellationToken);
 
         //var artifacts = FileSystemMiner.GetArtifacts(rootPath, out var exceptions, cancellationToken);

@@ -1,9 +1,10 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using TreeMiner.FileSystem;
 
 namespace TreeMiner.Tests
 {
-    internal class FileSystemHashExcavator : ITreeExcavator<FileSystemHashArtifact, FileSystemInfo, FileInfo, DirectoryInfo>
+    internal class FileSystemHashExcavator : IFileSystemExcavator<FileSystemHashArtifact>
     {
 
         private readonly List<Exception> _exceptionAggregate = new();

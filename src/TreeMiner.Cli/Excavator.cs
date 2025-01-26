@@ -3,7 +3,7 @@ using TreeMiner.FileSystem;
 
 namespace TreeMiner.Cli
 {
-    internal class Excavator(ILogger<Excavator> logger) : IFileSystemExcavator<Artifact>
+    internal class Excavator(ILogger<Excavator> logger) : IFileSystemExcavator<FileSystemArtifact>
     {
 
         public IEnumerable<FileSystemInfo> GetArtifacts(DirectoryInfo dirArtifact)
@@ -11,7 +11,7 @@ namespace TreeMiner.Cli
             return dirArtifact.GetFileSystemInfos();   
         }
 
-        public bool OnDirArtifact(Artifact dirArtifact, IEnumerable<FileSystemInfo> dirContent)
+        public bool OnDirArtifact(FileSystemArtifact dirArtifact, IEnumerable<FileSystemInfo> dirContent)
         {
             return true;
         }
@@ -22,7 +22,7 @@ namespace TreeMiner.Cli
             return true;
         }
 
-        public bool OnFileArtifact(Artifact fileArtifact)
+        public bool OnFileArtifact(FileSystemArtifact fileArtifact)
         {
             return true;
         }

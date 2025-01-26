@@ -1,6 +1,6 @@
 using TreeMiner.FileSystem;
 
-internal class FileSystemArtifact : IFileSystemArtifact
+public class FileSystemArtifact : IFileSystemArtifact
 {
     /// <summary>
     /// Gets or sets the unique identifier of the artifact.

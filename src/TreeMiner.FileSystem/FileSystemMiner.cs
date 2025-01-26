@@ -4,25 +4,24 @@
     {
         public static IEnumerable<IFileSystemArtifact> GetArtifacts(string path, CancellationToken cancellationToken = default)
         {
-            var fsm = new GenericFileSystemMiner<FileSystemArtifact>();
-            var root = fsm.GetRootArtifact(new DirectoryInfo(path));
-            return fsm.GetArtifacts(root, new FileSystemExcavator(cancellationToken));
+            var fileSystemMiner = new GenericFileSystemMiner<FileSystemArtifact>();
+            var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(path));
+            return fileSystemMiner.GetArtifacts(rootArtifact, new FileSystemExcavator(cancellationToken));
         }
-
 
         public static IEnumerable<TTreeArtifact> GetArtifacts<TTreeArtifact>(string path, IFileSystemExcavator<TTreeArtifact> excavator, CancellationToken cancellationToken = default) where TTreeArtifact : IFileSystemArtifact, new()
         {
-            var fsm = new GenericFileSystemMiner<TTreeArtifact>();
-            var root = fsm.GetRootArtifact(new DirectoryInfo(path));
-            return fsm.GetArtifacts(root, excavator);
+            var fileSystemMiner = new GenericFileSystemMiner<TTreeArtifact>();
+            var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(path));
+            return fileSystemMiner.GetArtifacts(rootArtifact, excavator);
         }
 
         public static IEnumerable<IFileSystemArtifact> GetArtifacts(string path, out List<ArtifactException<FileSystemInfo>> exceptions, CancellationToken cancellationToken = default)
         {
-            var fsm = new GenericFileSystemMiner<FileSystemArtifact>();
-            var root = fsm.GetRootArtifact(new DirectoryInfo(path));
+            var fileSystemMiner = new GenericFileSystemMiner<FileSystemArtifact>();
+            var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(path));
             exceptions = new List<ArtifactException<FileSystemInfo>>();
-            return fsm.GetArtifacts(root, new FileSystemExceptionExcavator(exceptions, cancellationToken));
+            return fileSystemMiner.GetArtifacts(rootArtifact, new FileSystemExceptionExcavator(exceptions, cancellationToken));
         }
     }
 }
