@@ -1,10 +1,24 @@
-﻿namespace TreeMiner.FileSystem
+using TreeMiner.FileSystem;
+
+internal class FileSystemArtifact : IFileSystemArtifact
 {
-    internal class FileSystemArtifact : IFileSystemArtifact
-    {
-        public Guid Id { get; set; }
-        public Guid ParentId { get; set; }
-        public int Level { get; set; }
-        public FileSystemInfo? Info { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the unique identifier of the artifact.
+    /// </summary>
+    public Guid Id { get; set; }
+
+    /// <summary>
+    /// Gets or sets the unique identifier of the parent artifact.
+    /// </summary>
+    public Guid ParentId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the level of the artifact in the directory tree.
+    /// </summary>
+    public int Level { get; set; }
+
+    /// <summary>
+    /// Gets or sets additional information associated with the artifact.
+    /// </summary>
+    public FileSystemInfo? Info { get; set; }
 }

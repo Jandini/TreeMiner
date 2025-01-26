@@ -1,31 +1,31 @@
 ﻿using Microsoft.Extensions.Logging;
-using TreeMiner;
+using TreeMiner.Cli;
+using TreeMiner.FileSystem;
 
-internal class Main
+internal class Main(
+    ILogger<Main> logger,
+    Excavator excavator)
 {
-    private readonly ILogger<Main> _logger;
-
-    public Main(ILogger<Main> logger)
-    {
-        _logger = logger;
-    }
 
     public async Task RunAsync(CancellationToken cancellationToken)
-    {
-        _logger.LogInformation("Hello, World!");
+    {        
 
 
-        var rootPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        var rootPath = @"C:\"; // Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-        var fileSystemMiner = new GenericTreeMiner<FileSystemArtifact, FileSystemInfo, FileInfo, DirectoryInfo>();
-        var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(rootPath));
+        //var fileSystemMiner = new GenericTreeMiner<FileSystemArtifact, FileSystemInfo, FileInfo, DirectoryInfo>();
+        //var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(rootPath));
 
-        var artifacts = fileSystemMiner.GetArtifacts(rootArtifact, (dirInfo) => dirInfo.GetFileSystemInfos());
+        //var artifacts = fileSystemMiner.GetArtifacts(rootArtifact, (dirInfo) => new List<FileSystemInfo>().AddRange(dirInfo.GetDirectories()).ToArray());
+
+
+        var artifacts = FileSystemMiner.GetArtifacts(rootPath, excavator, cancellationToken);
+
+        //var artifacts = FileSystemMiner.GetArtifacts(rootPath, out var exceptions, cancellationToken);
 
         foreach (var artifact in artifacts)
-            Console.WriteLine($"{artifact.Id} {artifact.ParentId} [{artifact.Info.FullName}]");
+            logger.LogDebug($"{{artifactId}} {{artifactParentId}} [{artifact.Info.FullName}]", artifact.Id, artifact.ParentId);
 
-
-        await Task.Delay(1000, cancellationToken);
+        await Task.CompletedTask;
     }
 }

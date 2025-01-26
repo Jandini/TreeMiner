@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TreeMiner.FileSystem\TreeMiner.FileSystem.csproj" />
     <ProjectReference Include="..\TreeMiner\TreeMiner.csproj" />
   </ItemGroup>
 

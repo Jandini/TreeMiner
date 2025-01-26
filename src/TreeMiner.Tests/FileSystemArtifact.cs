@@ -1,9 +1,9 @@
-﻿using TreeMiner;
+﻿using TreeMiner.FileSystem;
 
 /// <summary>
 /// Represents a file system artifact in a directory tree.
 /// </summary>
-public class FileSystemArtifact : ITreeArtifact<FileSystemInfo>
+public class FileSystemArtifact : IFileSystemArtifact
 {
     /// <summary>
     /// Gets or sets the unique identifier of the artifact.

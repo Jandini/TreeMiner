@@ -3,15 +3,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
+using TreeMiner.Cli;
 
 using var serviceProvider = new ServiceCollection()
     .AddLogging(builder => builder.AddSerilog(new LoggerConfiguration()
         .Enrich.WithMachineName()
         .WriteTo.Console(
             theme: AnsiConsoleTheme.Code,
-            outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u4}] [{MachineName}] [{SourceContext}] {Message}{NewLine}{Exception}")
+            outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u4}] [{SourceContext}] {Message}{NewLine}{Exception}")
         .CreateLogger()))
     .AddTransient<Main>()
+    .AddTransient<Excavator>()
     .BuildServiceProvider();
 
 try
