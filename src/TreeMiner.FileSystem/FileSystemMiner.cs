@@ -16,12 +16,12 @@
             return fileSystemMiner.GetArtifacts(rootArtifact, excavator);
         }
 
-        public static IEnumerable<IFileSystemArtifact> GetArtifacts(string path, out List<ArtifactException<FileSystemInfo>> exceptions, CancellationToken cancellationToken = default)
+        public static IEnumerable<IFileSystemArtifact> GetArtifacts(string path, ExceptionOption exceptionOption = ExceptionOption.ThrowAggregate, CancellationToken cancellationToken = default)
         {
             var fileSystemMiner = new GenericFileSystemMiner<FileSystemArtifact>();
             var rootArtifact = fileSystemMiner.GetRootArtifact(new DirectoryInfo(path));
-            exceptions = new List<ArtifactException<FileSystemInfo>>();
-            return fileSystemMiner.GetArtifacts(rootArtifact, new FileSystemExceptionExcavator(exceptions, cancellationToken));
+            var exceptionsAggregate = new List<ArtifactException<FileSystemInfo>>();
+            return fileSystemMiner.GetArtifacts(rootArtifact, new FileSystemExceptionExcavator(exceptionsAggregate, cancellationToken));
         }
     }
 }
