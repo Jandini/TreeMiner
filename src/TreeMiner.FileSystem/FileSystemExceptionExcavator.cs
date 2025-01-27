@@ -4,18 +4,15 @@ namespace TreeMiner.FileSystem
 {
     internal class FileSystemExceptionExcavator : IFileSystemExcavator<FileSystemArtifact>
     {
-        private readonly CancellationToken _cancellationToken;
         private readonly List<ArtifactException<FileSystemInfo>> _artifactExceptions;
 
-        public FileSystemExceptionExcavator(List<ArtifactException<FileSystemInfo>> artifactExceptions, CancellationToken cancellationToken = default)
+        public FileSystemExceptionExcavator(List<ArtifactException<FileSystemInfo>> artifactExceptions)
         {
             _artifactExceptions = artifactExceptions;
-            _cancellationToken = cancellationToken;
         }
         
         public IEnumerable<FileSystemInfo> GetArtifacts(DirectoryInfo dirArtifact)
         {
-            _cancellationToken.ThrowIfCancellationRequested();
             return dirArtifact.GetFileSystemInfos();
         }
 

@@ -16,14 +16,14 @@
         /// <param name="depthOption">The depth option for mining. Default is DepthOption.Deep.</param>
         /// <returns>An enumerable collection of directory and file artifacts.</returns>
         /// <exception cref="AggregateException">Thrown when one or more exceptions occur during artifact retrieval.</exception>
-        public static IEnumerable<TTreeArtifact> GetArtifacts<TTreeArtifact, TBaseArtifact, TFileArtifact, TDirArtifact>(this GenericTreeMiner<TTreeArtifact, TBaseArtifact, TFileArtifact, TDirArtifact> miner, TTreeArtifact dirArtifact, Func<TDirArtifact, IEnumerable<TBaseArtifact>> getArtifacts, ArtifactType artifactType = ArtifactType.All, DepthOption depthOption = DepthOption.Deep) 
+        public static IEnumerable<TTreeArtifact> GetArtifacts<TTreeArtifact, TBaseArtifact, TFileArtifact, TDirArtifact>(this GenericTreeMiner<TTreeArtifact, TBaseArtifact, TFileArtifact, TDirArtifact> miner, TTreeArtifact dirArtifact, Func<TDirArtifact, IEnumerable<TBaseArtifact>> getArtifacts, CancellationToken cancellationToken = default, ArtifactType artifactType = ArtifactType.All, DepthOption depthOption = DepthOption.Deep) 
             where TTreeArtifact : ITreeArtifact<TBaseArtifact>, new() 
             where TFileArtifact : class, TBaseArtifact 
             where TDirArtifact : class, TBaseArtifact
         {
             var exceptionAggregate = new List<ArtifactException<TBaseArtifact>>();
             
-            foreach (var artifact in miner.GetArtifacts(dirArtifact, getArtifacts, exceptionAggregate, artifactType, depthOption))
+            foreach (var artifact in miner.GetArtifacts(dirArtifact, getArtifacts, exceptionAggregate, cancellationToken, artifactType, depthOption))
                 yield return artifact;
 
             if (exceptionAggregate.Any())
