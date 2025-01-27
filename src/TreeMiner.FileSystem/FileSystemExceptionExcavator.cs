@@ -16,20 +16,19 @@ namespace TreeMiner.FileSystem
             return dirArtifact.GetFileSystemInfos();
         }
 
-        public bool OnDirArtifact(FileSystemArtifact dirArtifact, IEnumerable<FileSystemInfo> dirContent)
+        public void OnDirArtifact(FileSystemArtifact dirArtifact, IEnumerable<FileSystemInfo> dirContent)
         {
-            return true;
+
         }
 
-        public bool OnException(ArtifactException<FileSystemInfo> exception)
+        public void OnException(ArtifactException<FileSystemInfo> exception)
         {
             _artifactExceptions.Add(exception);                
-            return true;
         }
 
-        public bool OnFileArtifact(FileSystemArtifact fileArtifact)
+        public void OnFileArtifact(FileSystemArtifact fileArtifact)
         {
-            return true;
+
         }
     }
 }
