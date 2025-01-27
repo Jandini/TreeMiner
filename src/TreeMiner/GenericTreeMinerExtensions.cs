@@ -23,7 +23,7 @@
         {
             var exceptionAggregate = new List<ArtifactException<TBaseArtifact>>();
             
-            foreach (var artifact in miner.GetArtifacts(dirArtifact, getArtifacts, exceptionAggregate, cancellationToken, artifactType, depthOption))
+            foreach (var artifact in miner.GetArtifacts(dirArtifact, getArtifacts, null, null, (ex) => exceptionAggregate.Add(ex), depthOption, artifactType, cancellationToken))
                 yield return artifact;
 
             if (exceptionAggregate.Any())

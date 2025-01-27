@@ -19,9 +19,4 @@ public class ArtifactOptions
     /// Gets or sets the artifact type for retrieval.
     /// </summary>
     public ArtifactType ArtifactType { get; set; } = ArtifactType.All;
-
-    /// <summary>
-    /// Gets or sets the exception option for artifact retrieval.
-    /// </summary>
-    public ExceptionOption ExceptionOption { get; set; } = ExceptionOption.ThrowImmediatelly;
 }

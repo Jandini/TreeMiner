@@ -11,7 +11,7 @@
         /// <summary>
         /// Throws an aggregate exception after all exceptions have been collected.
         /// </summary>
-        ThrowAggregate,
+        ThrowAfter,
 
         /// <summary>
         /// Ignores exception and continues the operation.

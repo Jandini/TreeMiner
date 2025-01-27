@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using TreeMiner;
 using TreeMiner.Cli;
 using TreeMiner.FileSystem;
 
@@ -18,7 +19,7 @@ internal class Main(
 
         //var artifacts = fileSystemMiner.GetArtifacts(rootArtifact, (dirInfo) => new List<FileSystemInfo>().AddRange(dirInfo.GetDirectories()).ToArray());
     
-        var artifacts = FileSystemMiner.GetArtifacts(rootPath, excavator, cancellationToken);
+        var artifacts = FileSystemMiner.GetArtifacts(rootPath, cancellationToken, ExceptionOption.Continue);
 
         //var artifacts = FileSystemMiner.GetArtifacts(rootPath, out var exceptions, cancellationToken);
 
