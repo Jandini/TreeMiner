@@ -5,7 +5,6 @@
 /// </summary>
 public class ArtifactOptions
 {
-
     /// <summary>
     /// Gets the default artifact options.
     /// </summary>

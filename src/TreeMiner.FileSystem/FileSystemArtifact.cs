@@ -1,6 +1,6 @@
-using TreeMiner;
+using TreeMiner.FileSystem;
 
-public class FileSystemArtifact : ITreeArtifact<FileSystemInfo>
+public class FileSystemArtifact : IFileSystemArtifact
 {
     /// <summary>
     /// Gets or sets the unique identifier of the artifact.
@@ -20,5 +20,5 @@ public class FileSystemArtifact : ITreeArtifact<FileSystemInfo>
     /// <summary>
     /// Gets or sets additional information associated with the artifact.
     /// </summary>
-    public FileSystemInfo Info { get; set; }
+    public FileSystemInfo? Info { get; set; }
 }
